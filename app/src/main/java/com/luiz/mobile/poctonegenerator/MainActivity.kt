@@ -40,11 +40,21 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
-        private var tones = arrayOf<Tone>(
+        private var tones = arrayOf(
                 Tone(
                         ToneGenerator.TONE_CDMA_ABBR_ALERT,
                         "TONE_CDMA_ABBR_ALERT",
                         "CDMA_ABBR_ALERT tone: 1150Hz+770Hz 400ms ON"
+                ),
+                Tone(
+                        ToneGenerator.TONE_PROP_BEEP2,
+                        "TONE_PROP_BEEP2",
+                        "Proprietary tone, general double beep: twice 400Hz+1200Hz, 35ms ON, 200ms OFF, 35ms ON"
+                ),
+                Tone(
+                        ToneGenerator.TONE_PROP_BEEP,
+                        "TONE_PROP_BEEP",
+                        "Proprietary tone, general beep: 400Hz+1200Hz, 35ms ON"
                 ),
                 Tone(
                         ToneGenerator.TONE_CDMA_ABBR_INTERCEPT,
@@ -52,14 +62,29 @@ class MainActivity : AppCompatActivity() {
                         "CDMA Abbr Intercept tone: 440Hz 250ms ON, 620Hz 250ms ON"
                 ),
                 Tone(
+                        ToneGenerator.TONE_CDMA_ALERT_AUTOREDIAL_LITE,
+                        "CDMA_ALERT_AUTOREDIAL_LITE",
+                        "CDMA Alert Auto Redial tone: {1245Hz 62ms ON, 659Hz 62ms ON} 3 times, 1245 62ms ON"
+                ),
+                Tone(
+                        ToneGenerator.TONE_CDMA_EMERGENCY_RINGBACK,
+                        "TONE_CDMA_EMERGENCY_RINGBACK",
+                        "CDMA EMERGENCY RINGBACK tone: {941Hz 125ms ON, 10ms OFF} 3times 4990ms OFF, REPEAT..."
+                ),
+                Tone(
+                        ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE,
+                        "TONE_CDMA_SOFT_ERROR_LITE",
+                        "CDMA SOFT ERROR LITE tone: 1047Hz 125ms ON, 370Hz 125ms"
+                ),
+                Tone(
+                        ToneGenerator.TONE_PROP_ACK,
+                        "TONE_PROP_ACK",
+                        "Proprietary tone, positive acknowlegement: 1200Hz, 100ms ON, 100ms OFF 2 bursts"
+                ),
+                Tone(
                         ToneGenerator.TONE_CDMA_ABBR_REORDER,
                         "TONE_CDMA_ABBR_REORDER",
                         "CDMA Abbr Reorder tone: 480Hz+620Hz 250ms ON, 250ms OFF repeated for 8 times"
-                ),
-                Tone(
-                        ToneGenerator.TONE_CDMA_ALERT_AUTOREDIAL_LITE,
-                        "NE_CDMA_ALERT_AUTOREDIAL_LITE",
-                        "CDMA Alert Auto Redial tone: {1245Hz 62ms ON, 659Hz 62ms ON} 3 times, 1245 62ms ON"
                 ),
                 Tone(
                         ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD,
@@ -135,11 +160,6 @@ class MainActivity : AppCompatActivity() {
                         ToneGenerator.TONE_CDMA_DIAL_TONE_LITE,
                         "TONE_CDMA_DIAL_TONE_LITE",
                         "CDMA Dial tone : 425Hz continuous"
-                ),
-                Tone(
-                        ToneGenerator.TONE_CDMA_EMERGENCY_RINGBACK,
-                        "TONE_CDMA_EMERGENCY_RINGBACK",
-                        "CDMA EMERGENCY RINGBACK tone: {941Hz 125ms ON, 10ms OFF} 3times 4990ms OFF, REPEAT..."
                 ),
                 Tone(
                         ToneGenerator.TONE_CDMA_HIGH_L,
@@ -362,11 +382,6 @@ class MainActivity : AppCompatActivity() {
                         "CDMA_SIGNAL_OFF - silent tone"
                 ),
                 Tone(
-                        ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE,
-                        "TONE_CDMA_SOFT_ERROR_LITE",
-                        "CDMA SOFT ERROR LITE tone: 1047Hz 125ms ON, 370Hz 125ms"
-                ),
-                Tone(
                         ToneGenerator.TONE_DTMF_0,
                         "TONE_DTMF_0",
                         "DTMF tone for key 0: 1336Hz, 941Hz, continuous"
@@ -447,21 +462,6 @@ class MainActivity : AppCompatActivity() {
                         "DTMF tone for key *: 1209Hz, 941Hz, continuous"
                 ),
                 Tone(
-                        ToneGenerator.TONE_PROP_ACK,
-                        "TONE_PROP_ACK",
-                        "Proprietary tone, positive acknowlegement: 1200Hz, 100ms ON, 100ms OFF 2 bursts"
-                ),
-                Tone(
-                        ToneGenerator.TONE_PROP_BEEP,
-                        "TONE_PROP_BEEP",
-                        "Proprietary tone, general beep: 400Hz+1200Hz, 35ms ON"
-                ),
-                Tone(
-                        ToneGenerator.TONE_PROP_BEEP2,
-                        "TONE_PROP_BEEP2",
-                        "Proprietary tone, general double beep: twice 400Hz+1200Hz, 35ms ON, 200ms OFF, 35ms ON"
-                ),
-                Tone(
                         ToneGenerator.TONE_PROP_NACK,
                         "TONE_PROP_NACK",
                         "Proprietary tone, negative acknowlegement: 300Hz+400Hz+500Hz, 400ms ON"
@@ -502,11 +502,6 @@ class MainActivity : AppCompatActivity() {
                         "Call supervisory tone, Dial tone: CEPT: 425Hz, continuous ANSI (IS-95): 350Hz+440Hz, continuous JAPAN: 400Hz, continuous"
                 ),
                 Tone(
-                        ToneGenerator.TONE_SUP_ERROR,
-                        "TONE_SUP_ERROR",
-                        "Call supervisory tone, Error/Special info: 950Hz+1400Hz+1800Hz, 330ms ON, 1s OFF..."
-                ),
-                Tone(
                         ToneGenerator.TONE_SUP_INTERCEPT,
                         "TONE_SUP_INTERCEPT",
                         "Call supervisory tone (IS-95), intercept tone: alternating 440 Hz and 620 Hz tones, each on for 250 ms"
@@ -535,8 +530,14 @@ class MainActivity : AppCompatActivity() {
                         ToneGenerator.TONE_SUP_RINGTONE,
                         "TONE_SUP_RINGTONE",
                         "Call supervisory tone, Ring Tone: CEPT, JAPAN: 425Hz, 1s ON, 4s OFF..."
-                )
+                ),
+                Tone(
+                        ToneGenerator.TONE_SUP_ERROR,
+                        "TONE_SUP_ERROR",
+                        "Call supervisory tone, Error/Special info: 950Hz+1400Hz+1800Hz, 330ms ON, 1s OFF..."
+                ),
         )
+
         private var toneDurBar: SeekBar? = null
         var toneDurText: TextView? = null
         private var toneList: ListView? = null
@@ -546,7 +547,7 @@ class MainActivity : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
                 setContentView(R.layout.activity_main)
-                toneGenerator = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
+                toneGenerator = ToneGenerator(AudioManager.STREAM_SYSTEM, 100)
                 toneDurBar = findViewById(R.id.tonedur)
                 toneDurText = findViewById(R.id.tonedurtext)
                 toneDurText!!.text = this.toneDurBar!!.progress.toString() + " ms"
