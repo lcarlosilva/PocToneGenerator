@@ -1,14 +1,9 @@
 package com.luiz.mobile.poctonegenerator
 
-import android.content.Context
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -17,27 +12,37 @@ import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity() {
-        class Tone internal constructor(var toneType: Int, var toneName: String, var toneDesc: String) {
-                override fun toString(): String {
-                        return toneName
-                }
-        }
 
-        inner class ToneArrayAdapter(context: Context?, resource: Int, var toneArray: Array<Tone>) :
-                ArrayAdapter<Tone?>(context!!, resource, toneArray) {
-                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                        var row = convertView
-                        if (row == null) {
-                                val inflater: LayoutInflater = layoutInflater
-                                row = inflater.inflate(R.layout.row, parent, false)
+        private var toneDurBar: SeekBar? = null
+        var toneDurText: TextView? = null
+        private var toneList: ListView? = null
+        private var toneListAdapter: ToneAdapter? = null
+        private var toneGenerator: ToneGenerator? = null
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                setContentView(R.layout.activity_main)
+                toneGenerator = ToneGenerator(AudioManager.STREAM_SYSTEM, 100)
+                toneDurBar = findViewById(R.id.tonedur)
+                toneDurText = findViewById(R.id.tonedurtext)
+                toneDurText!!.text = getString(R.string.txt_value_ms, this.toneDurBar!!.progress.toString())
+                toneDurBar!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                                toneDurText!!.text = getString(R.string.txt_value_ms, progress.toString())
                         }
-                        val listName = row!!.findViewById<View>(R.id.name) as TextView
-                        listName.text = (String.format("%02d", toneArray[position].toneType)
-                                + " : " + toneArray[position].toneName)
-                        val listDesc = row.findViewById<View>(R.id.desc) as TextView
-                        listDesc.text = toneArray[position].toneDesc
-                        return row
-                }
+                        override fun onStartTrackingTouch(seekBar: SeekBar) {}
+                        override fun onStopTrackingTouch(seekBar: SeekBar) {}
+                })
+                toneList = findViewById(R.id.tonelist)
+                toneListAdapter = ToneAdapter(this, R.layout.row, tones)
+                toneList!!.adapter = toneListAdapter
+                toneList!!.onItemClickListener =
+                        OnItemClickListener { parent, view, position, id ->
+                                val t = parent.getItemAtPosition(position) as Tone
+                                val type = t.toneType
+                                val durationMs = toneDurBar!!.progress
+                                toneGenerator!!.startTone(type, durationMs)
+                        }
         }
 
         private var tones = arrayOf(
@@ -537,39 +542,4 @@ class MainActivity : AppCompatActivity() {
                         "Call supervisory tone, Error/Special info: 950Hz+1400Hz+1800Hz, 330ms ON, 1s OFF..."
                 ),
         )
-
-        private var toneDurBar: SeekBar? = null
-        var toneDurText: TextView? = null
-        private var toneList: ListView? = null
-        private var toneListAdapter: ToneArrayAdapter? = null
-        private var toneGenerator: ToneGenerator? = null
-
-        override fun onCreate(savedInstanceState: Bundle?) {
-                super.onCreate(savedInstanceState)
-                setContentView(R.layout.activity_main)
-                toneGenerator = ToneGenerator(AudioManager.STREAM_SYSTEM, 100)
-                toneDurBar = findViewById(R.id.tonedur)
-                toneDurText = findViewById(R.id.tonedurtext)
-                toneDurText!!.text = this.toneDurBar!!.progress.toString() + " ms"
-                toneDurBar!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-                        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                                toneDurText!!.text = "$progress ms"
-                        }
-
-                        override fun onStartTrackingTouch(seekBar: SeekBar) {}
-                        override fun onStopTrackingTouch(seekBar: SeekBar) {}
-                })
-                toneList = findViewById(R.id.tonelist)
-                toneListAdapter = ToneArrayAdapter(this,
-                        R.layout.row, tones
-                )
-                toneList!!.adapter = toneListAdapter
-                toneList!!.onItemClickListener =
-                        OnItemClickListener { parent, view, position, id ->
-                                val t = parent.getItemAtPosition(position) as Tone
-                                val type = t.toneType
-                                val durationMs = toneDurBar!!.progress
-                                toneGenerator!!.startTone(type, durationMs)
-                        }
-        }
 }
